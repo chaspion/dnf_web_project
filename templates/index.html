@@ -59,7 +59,9 @@
 
     <script>
         $(document).ready(function () {
-            $("#stat_table").hide()
+            console.log('called')
+            $("#stat_table").hide();
+            showepic();
         });
 
 
@@ -230,6 +232,48 @@
         }
 
 
+        function showepic() {
+            $('#item-box').empty();
+            $.ajax({
+                type: 'GET',
+                url: '/api/list',
+                data: {},
+                success: function (response) {
+                    let epics = response['epics'];
+                    if (response['result'] == 'success') {
+                        for (let i = 0; i < epics.length; i++) {
+                            console.log(epics[i]);
+                            let name = epics[i]['name'];
+                            let channel = epics[i]['channel_name'];
+                            let time = epics[i]['time'];
+                            let img_url = epics[i]['img_url'];
+
+                            let itemList = `<div class="card">
+                                <div class="card-content">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="image is-48x48">
+                                        <img
+                                          src="${img_url}"
+                                          alt="Placeholder image"
+                                        />
+                                      </figure>
+                                    </div>
+                                    <div class="media-content">
+                                      <a target="_blank" class="star-name title is-4">${name}</a>
+                                      <p class="subtitle is-6">${channel} ${time}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>`;
+
+                            $('#item-box').append(itemList);
+                        }
+                    }
+                }
+            });
+        }
+
     </script>
 
 </head>
@@ -314,6 +358,27 @@
     <img id="img-char" class = size-control src="https://developers.neople.co.kr/img/logo_t1.png" />
     </div>
 </div>
+
+    <div class="item-list" id="item-box">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-20x20">
+                            <img
+                                    src="https://img-api.neople.co.kr/df/items/cd5895092f186bc87dbb8b540271c9d3"
+                                    alt="Placeholder image"
+                            />
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <a href="#" target="_blank" class="star-name title is-4"> 아이템명</a>
+                        <p class="subtitle is-6"> 드랍된 채널 시간 </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>

@@ -13,23 +13,10 @@ db = client.dbsparta
 def home():
     return render_template('index.html')
 
-# @app.route('/info', methods=['POST'])
-# def post_orders():
-#     server_r = request.form['server_give']
-#     name_r = request.form['name_give']
-#
-#     info = {
-#         'server': server_r,
-#         'name': name_r
-#     }
-#
-#     db.info.insert_one(info)
-#     return jsonify({'result': 'success'})
-#
-# @app.route('/info', methods=['GET'])
-# def get_orders():
-#     basic_info = list(db.info.find({}, {'_id': 0}))
-#     return jsonify({'result': 'success', 'basic_info': basic_info})
+@app.route('/api/list', methods=['GET'])
+def show_items():
+    epics = list(db.epics.find({}, {"_id": False}).sort('_id', DESCENDING))
+    return jsonify({'result': 'success', 'epics': epics})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
