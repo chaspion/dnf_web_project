@@ -208,7 +208,12 @@
                               </div>`;
 
                             $('#item-box').append(itemList);
+
+                            console.log('success')
                         }
+                    }
+                    else {
+                        console.log('fail')
                     }
                 }
             });
