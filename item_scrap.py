@@ -1,3 +1,5 @@
+#던파 아카이브에서 이미 읽어오는걸 한번 더 읽어오기
+
 import pymongo
 import requests
 from bs4 import BeautifulSoup
