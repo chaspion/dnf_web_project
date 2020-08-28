@@ -6,18 +6,31 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from selenium import webdriver
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@3.34.187.59', 27017)
 db = client.dbsparta
 
 # headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 #
 # data = requests.get("http://df.nexon.com/df/info/equipment/view?id=v1czui", headers = headers)
 
-driver = webdriver.Chrome('chromedriver.exe')
+# driver = webdriver.Chrome('chromedriver.exe')
+# driver.get('https://dnf.akaib.com/')
+# html = driver.page_source
+# soup = BeautifulSoup(html, 'html.parser')
+# driver.close()
+
+
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+driver = webdriver.Chrome(executable_path="chromedriver", chrome_options=chrome_options)
 driver.get('https://dnf.akaib.com/')
 html = driver.page_source
 soup = BeautifulSoup(html, 'html.parser')
 driver.close()
+
+
+
 
 epics = soup.select('#recent-epic > div > ul > li')
 
