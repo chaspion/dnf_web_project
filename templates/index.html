@@ -9,17 +9,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <title>던파 단기 수익창출 웹 제작</title>
     <!-- JQuery를 import 합니다 -->
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             console.log('called')
             $("#stat_table").hide();
-            showepic();
+            ranking();
         });
 
 
@@ -123,7 +126,7 @@
 
                     $('#img-char').attr("src", charImg);
 
-                    $("#item-box").hide();
+                    $("#rank").hide();
                     $("#stat_table").show();
 
                     $.ajax({
@@ -191,42 +194,78 @@
         }
 
 
-        function showepic() {
+        {#function showepic() {#}
+        {#    $('#item-box').empty();#}
+        {#    $.ajax({#}
+        {#        type: 'GET',#}
+        {#        url: '/api/list',#}
+        {#        data: {},#}
+        {#        success: function (response) {#}
+        {#            let epics = response['epics'];#}
+        {#            if (response['result'] == 'success') {#}
+        {#                for (let i = 0; i < epics.length; i++) {#}
+        {#                    console.log(epics[i]);#}
+        {#                    let name = epics[i]['name'];#}
+        {#                    let channel = epics[i]['channel_name'];#}
+        {#                    let time = epics[i]['time'];#}
+        {#                    let img_url = epics[i]['img_url'];#}
+        {##}
+        {#                    let itemList = `<div class="card">#}
+        {#                        <div class="card-content">#}
+        {#                          <div class="media">#}
+        {#                            <div class="media-left">#}
+        {#                              <figure class="image is-48x48">#}
+        {#                                <img#}
+        {#                                  src="${img_url}"#}
+        {#                                  alt="Placeholder image"#}
+        {#                                />#}
+        {#                              </figure>#}
+        {#                            </div>#}
+        {#                            <div class="media-content">#}
+        {#                              <a target="_blank" class="star-name title is-4"> ${name} | [채널] ${channel} | [시간] ${time}</a>#}
+        {#                              <p class="subtitle is-6"></p>#}
+        {#                            </div>#}
+        {#                          </div>#}
+        {#                        </div>#}
+        {#                      </div>`;#}
+        {##}
+        {#                    $('#item-box').append(itemList);#}
+        {##}
+        {#                    console.log('success')#}
+        {#                }#}
+        {#            }#}
+        {#            else {#}
+        {#                console.log('fail')#}
+        {#            }#}
+        {#        }#}
+        {#    });#}
+
+        function ranking() {
             $('#item-box').empty();
             $.ajax({
                 type: 'GET',
-                url: '/api/list',
+                url: '/api/ranking',
                 data: {},
                 success: function (response) {
-                    let epics = response['epics'];
+                    let ranking = response['ranking'];
                     if (response['result'] == 'success') {
-                        for (let i = 0; i < epics.length; i++) {
-                            console.log(epics[i]);
-                            let name = epics[i]['name'];
-                            let channel = epics[i]['channel_name'];
-                            let time = epics[i]['time'];
-                            let img_url = epics[i]['img_url'];
+                        for (let i = 0; i < 100; i++) {
+                            console.log(ranking[i]);
+                            let name = ranking[i]['name'];
+                            let damage = ranking[i]['damage'];
+                            let server = ranking[i]['server'];
+                            let job = ranking[i]['job'];
+                            let doff_url = ranking[i]['url'];
+                            let rank = i+1;
 
-                            let itemList = `<div class="card">
-                                <div class="card-content">
-                                  <div class="media">
-                                    <div class="media-left">
-                                      <figure class="image is-48x48">
-                                        <img
-                                          src="${img_url}"
-                                          alt="Placeholder image"
-                                        />
-                                      </figure>
-                                    </div>
-                                    <div class="media-content">
-                                      <a target="_blank" class="star-name title is-4"> ${name} | [채널] ${channel} | [시간] ${time}</a>
-                                      <p class="subtitle is-6"></p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>`;
+                            let ranklist = `<tr>
+                                            <td>${rank}위</td>
+                                            <td>[${server}] ${name}</td>
+                                            <td>${job}</td>
+                                            <td>${damage}</td>
+                                            </tr>`
 
-                            $('#item-box').append(itemList);
+                            $('#ranking').append(ranklist);
 
                             console.log('success')
                         }
@@ -236,6 +275,8 @@
                     }
                 }
             });
+
+
         }
 
     </script>
@@ -273,14 +314,17 @@
         }
 
         .neople-size-control {
-            width: 500px;
+            width: 200px;
             border: 20px;
         }
 
         .epic-size-control {
-            margin-left: 700px;
-            margin-right: 700px;
-            border: 100px;
+            padding-left: 200px;
+            padding-right: 200px;
+        }
+
+        *{
+            font-family: 'Nanum Myeongjo', serif;
         }
 
         table {font-size: 10pt;}
@@ -294,12 +338,12 @@
 </head>
 <body>
 
-<h5>dnf web project / by apdoros</h5>
+<h5> 압도로스의 무의식 </h5>
 
 <hr/>
 
 <div class="background-center">
-    <h2>df 개발중</h2>
+    <h2>DNF 개발중</h2>
 
 <!--        <h3>서버 선택 <input type="text" id = "server-name"> </h3>-->
     <div class="length-control">
@@ -368,11 +412,8 @@
             </tbody>
         </table>
     </div>
-
-    <div>
-    <img id="img-char" class = neople-size-control src="https://developers.neople.co.kr/img/logo_t1.png" />
-    </div>
 </div>
+
 
 <div class="epic-size-control">
     <div class="item-list" id="item-box">
@@ -397,6 +438,25 @@
     </div>
 </div>
 
+<div class="epic-size-control" id="rank">
+    <h1 class="background-center"> 아라드 최강자 랭킹 TOP 100 </h1>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">랭킹</th>
+            <th scope="col">닉네임</th>
+            <th scope="col">직업</th>
+            <th scope="col">25초 데미지</th>
+        </tr>
+        </thead>
+        <tbody id="ranking">
+        </tbody>
+    </table>
+</div>
+
+<div class="background-center">
+    <img id="img-char" class = neople-size-control src="https://developers.neople.co.kr/img/logo_t1.png" />
+</div>
 
 </body>
 </html>

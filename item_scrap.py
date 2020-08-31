@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from selenium import webdriver
 
-client = MongoClient('mongodb://chaspion:tkfkdgo3@3.34.187.59', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@3.35.53.238', 27017)
 db = client.dbsparta
 
 # headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
@@ -21,8 +21,17 @@ db = client.dbsparta
 
 
 
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-dev-shm-usage')
+chrome_options.add_argument("start-maximized")
+chrome_options.add_argument("disable-infobars")
+chrome_options.add_argument("--disable-extensions")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--single-process")
+chrome_options.add_argument('--remote-debugging-port=9222')
 driver = webdriver.Chrome(executable_path="chromedriver", chrome_options=chrome_options)
 driver.get('https://dnf.akaib.com/')
 html = driver.page_source

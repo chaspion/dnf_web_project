@@ -1,73 +1,90 @@
-#던파 홈피 장비사전에서 불러오기
-
 import requests
 from bs4 import BeautifulSoup
-
 from pymongo import MongoClient
-
 from selenium import webdriver
 
 client = MongoClient('localhost', 27017)
 db = client.dbsparta
 
-driver = webdriver.Chrome('chromedriver.exe')
-driver.get('http://df.nexon.com/df/info/equipment#btn')
-html = driver.page_source
-soup = BeautifulSoup(html, 'html.parser')
-driver.close()
 
-def get_urls():
+db.jobs.delete_many({})
+db.jobs.insert_one({'job': '검신', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
+db.jobs.insert_one({'job': '다크로드', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
+# db.jobs.insert_one({'job': '블러드%20이블', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
+# db.jobs.insert_one({'job': '인다라천', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
+# db.jobs.insert_one({'job': '악귀나찰', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
+#
+# db.jobs.insert_one({'job': '네메시스', 'class': '귀검사', 'gender': 'F', 'type': 'S'})
+db.jobs.insert_one({'job': '검제', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
+# db.jobs.insert_one({'job': '디어사이드', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
+# db.jobs.insert_one({'job': '마제스티', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
+#
+# db.jobs.insert_one({'job': '그림리퍼', 'class': '도적', 'gender': 'F', 'type': 'S'})
+db.jobs.insert_one({'job': '시라누이', 'class': '도적', 'gender': 'F', 'type': 'D'})
+# db.jobs.insert_one({'job': '타나토스', 'class': '도적', 'gender': 'F', 'type': 'D'})
+# db.jobs.insert_one({'job': '알키오네', 'class': '도적', 'gender': 'F', 'type': 'D'})
 
-    trs = soup.select('#equipmentList > dl')
-    # old_content > table > tbody > tr:nth-child(2) > td.title > a
-    # equipmentList > dl:nth-child(1) > a > dd > p.larea > strong
-    # equipmentList > dl:nth-child(1) > a
-    # equipmentList > dl:nth-child(2) > a
+job = list(db.jobs.find({}, { "_id": 0}))
 
-    urls = []
-    for tr in trs:
-        a = tr.select_one('a')
-        if a is not None:
-            base_url = 'http://df.nexon.com/'
-            url = base_url + a['href']
-            urls.append(url)
+#랭킹 1~3페이지까지 링크 크롤링
+urls = []
+for i in range (0, len(job)):
+    for j in range(1, 2):
+        base_url_1 = 'https://dunfaoff.com/ranking.df?jobName='
+        base_url_2 = '&jobGrowName='
+        base_url_3 = '&gender='
+        base_url_4 = '&page='
+        url = base_url_1 + job[i]['class'] + base_url_2 + job[i]['job'] + base_url_3 + job[i]['gender'] + base_url_4 + str(j)
+        urls.append(url)
 
-    return urls
+# print(urls)
+# print(len(urls))
+
+#랭킹 1~4페이지까지 각각 캐릭 정보 페이지 링크 크롤링
+rank_url = []
+for i in range(0, len(urls)):
+    headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    data = requests.get(urls[i], headers=headers)
+    soup = BeautifulSoup(data.text, 'html.parser')
+
+    char_info = soup.select('#back > div > div.col-sm-12.col-md-12.col-xl-8.col-lg-8 > div > div:nth-child(4) > div')
+
+    for info in char_info:
+        base_url = 'https://dunfaoff.com/SearchResult.df?server='
+        base2_url = '&characterid='
+        url = base_url + info['server'] + base2_url + info['characterid']
+        rank_url.append(url)
+    print('진행중: ' + str(i) + '/' + str(len(urls)))
+print('완료')
+print(rank_url)
+
+print(rank_url[2])
 
 
-# 출처 url로부터 영화인들의 사진, 이름, 최근작 정보를 가져오고 mystar 콜렉션에 저장합니다.
-def insert_star(urls):
+#랭킹 1~4페이지까지 전 직업 캐릭터명 / 데미지 저장
+# db.rank.delete_many({})
+for i in range(0, len(rank_url)):
     driver = webdriver.Chrome('chromedriver.exe')
-    driver.get(urls)
+    driver.get(rank_url[i])
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
     driver.close()
 
-    name = soup.select_one('#equipmentList > div.equi_more > div.cardView > div > div > dl > dt > a > span').text
-    img_url = soup.select_one('#equipmentList > div.equi_more > div.cardView > div > div > dl > dt > a > img')['src']
-    recent_channel_name = soup.select_one('#equipmentList > div.epicDrop > div > dl:nth-child(1) > dt > span:nth-child(1)').text
-    recent_channel = soup.select_one('#equipmentList > div.epicDrop > div > dl:nth-child(1) > dt').text
-    recent_time = soup.select_one('#equipmentList > div.epicDrop > div > dl:nth-child(1) > dd')
+    name = soup.select_one('#char_name').text
+    server = soup.select_one('#char_server').text
+    job = soup.select_one('#char_info').text
+    damage = soup.select_one('#skill_damage > div:nth-child(5) > div.dmgRow > b.sinergeDmg0').text
 
-    doc = {
+    char = {
         'name': name,
-        'img_url': img_url,
-        'channel_name': recent_channel_name,
-        'channel': recent_channel,
-        'time': recent_time
+        'server': server,
+        'job': job[30:],
+        'damage': damage,
+        'url': rank_url[i]
     }
-
-    db.epictable.insert_one(doc)
+    db.rank.insert_one(char)
+    db.rank.update(char, char, upsert=True)
     print('완료!', name)
 
 
-# 기존 mystar 콜렉션을 삭제하고, 출처 url들을 가져온 후, 크롤링하여 DB에 저장합니다.
-# def insert_all():
-#     db.mystar.drop()  # mystar 콜렉션을 모두 지워줍니다.
-#     urls = get_urls()
-#     for url in urls:
-#         insert_star(url)
-
-
-### 실행하기
-# insert_all()
