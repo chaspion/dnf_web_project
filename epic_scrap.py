@@ -3,30 +3,30 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from selenium import webdriver
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@3.35.53.238', 27017)
 db = client.dbsparta
 
 
 db.jobs.delete_many({})
 db.jobs.insert_one({'job': '검신', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
 db.jobs.insert_one({'job': '다크로드', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
-# db.jobs.insert_one({'job': '블러드%20이블', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
-# db.jobs.insert_one({'job': '인다라천', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
-# db.jobs.insert_one({'job': '악귀나찰', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
-#
-# db.jobs.insert_one({'job': '네메시스', 'class': '귀검사', 'gender': 'F', 'type': 'S'})
+db.jobs.insert_one({'job': '블러드%20이블', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
+db.jobs.insert_one({'job': '인다라천', 'class': '귀검사', 'gender': 'M', 'type': 'S'})
+db.jobs.insert_one({'job': '악귀나찰', 'class': '귀검사', 'gender': 'M', 'type': 'D'})
+
+db.jobs.insert_one({'job': '네메시스', 'class': '귀검사', 'gender': 'F', 'type': 'S'})
 db.jobs.insert_one({'job': '검제', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
-# db.jobs.insert_one({'job': '디어사이드', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
-# db.jobs.insert_one({'job': '마제스티', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
-#
-# db.jobs.insert_one({'job': '그림리퍼', 'class': '도적', 'gender': 'F', 'type': 'S'})
+db.jobs.insert_one({'job': '디어사이드', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
+db.jobs.insert_one({'job': '마제스티', 'class': '귀검사', 'gender': 'F', 'type': 'D'})
+
+db.jobs.insert_one({'job': '그림리퍼', 'class': '도적', 'gender': 'F', 'type': 'S'})
 db.jobs.insert_one({'job': '시라누이', 'class': '도적', 'gender': 'F', 'type': 'D'})
-# db.jobs.insert_one({'job': '타나토스', 'class': '도적', 'gender': 'F', 'type': 'D'})
-# db.jobs.insert_one({'job': '알키오네', 'class': '도적', 'gender': 'F', 'type': 'D'})
+db.jobs.insert_one({'job': '타나토스', 'class': '도적', 'gender': 'F', 'type': 'D'})
+db.jobs.insert_one({'job': '알키오네', 'class': '도적', 'gender': 'F', 'type': 'D'})
 
 job = list(db.jobs.find({}, { "_id": 0}))
 
-#랭킹 1~3페이지까지 링크 크롤링
+#랭킹 1~5페이지까지 링크 크롤링
 urls = []
 for i in range (0, len(job)):
     for j in range(1, 2):
@@ -40,7 +40,7 @@ for i in range (0, len(job)):
 # print(urls)
 # print(len(urls))
 
-#랭킹 1~4페이지까지 각각 캐릭 정보 페이지 링크 크롤링
+#랭킹 1~5페이지까지 각각 캐릭 정보 페이지 링크 크롤링
 rank_url = []
 for i in range(0, len(urls)):
     headers = {
@@ -62,10 +62,20 @@ print(rank_url)
 print(rank_url[2])
 
 
-#랭킹 1~4페이지까지 전 직업 캐릭터명 / 데미지 저장
+#랭킹 1~5페이지까지 전 직업 캐릭터명 / 데미지 저장
 # db.rank.delete_many({})
 for i in range(0, len(rank_url)):
-    driver = webdriver.Chrome('chromedriver.exe')
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("start-maximized")
+    chrome_options.add_argument("disable-infobars")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--single-process")
+    chrome_options.add_argument('--remote-debugging-port=9222')
+    driver = webdriver.Chrome(executable_path="chromedriver", chrome_options=chrome_options)
     driver.get(rank_url[i])
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
