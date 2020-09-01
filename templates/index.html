@@ -169,7 +169,7 @@
 // https://dundam.xyz/view.jsp?server=cain&name=%EC%95%95%EB%8F%84&image=0371060bc18b58a0da2a6f61f79f2e35
                             let dundam_url = "https://dundam.xyz/view.jsp?server=" + serverID(serName) +
                                                 "&name=" + charEncode + "&image=" + charId
-                            let sirroco = "개발중";
+                            let ranking = "개발중";
                             let sandbag = "개발중";
 
 
@@ -181,7 +181,7 @@
                                             <td>${stat['name']} ${stat['value']}</td>
                                             <td>${crit['name'][0]}${crit['name'][3]} ${crit['value']}</td>
                                             <td>${element_attack['name'][0]}${element_attack['name'][1]}${element_attack['name'][4]} ${element_attack['value']}</td>
-                                            <td>${sirroco}</td>
+                                            <td>${ranking}</td>
                                             <td>${sandbag}</td>
                                             </tr>`
 
@@ -259,10 +259,10 @@
                             let rank = i+1;
 
                             let ranklist = `<tr>
-                                            <td>${rank}위</td>
-                                            <td>[${server}] ${name}</td>
-                                            <td>${job}</td>
-                                            <td>${damage}</td>
+                                            <th class="shrink">${rank}위</th>
+                                            <th class="shrink">[${server}] ${name}</th>
+                                            <th class="shrink">${job}</th>
+                                            <th class="shrink">${damage}</th>
                                             </tr>`
 
                             $('#ranking').append(ranklist);
@@ -327,7 +327,15 @@
             font-family: 'Nanum Myeongjo', serif;
         }
 
-        table {font-size: 10pt;}
+        table {
+            font-size: 10pt;
+        }
+
+        table th.shrink {
+            white-space: nowrap
+        }
+
+
 
     </style>
 
@@ -404,7 +412,7 @@
                 <th scope="col">스탯</th>
                 <th scope="col">크리</th>
                 <th scope="col">속성</th>
-                <th scope="col">시로코딜</th>
+                <th scope="col">직업랭킹</th>
                 <th scope="col">샌드백딜</th>
             </tr>
             </thead>
@@ -439,14 +447,14 @@
 </div>
 
 <div class="epic-size-control" id="rank">
-    <h1 class="background-center"> 아라드 최강자 랭킹 TOP 100 </h1>
+    <h3 class="background-center" style="white-space: nowrap"> 아라드 최강자 랭킹 TOP 100 </h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">랭킹</th>
-            <th scope="col">닉네임</th>
-            <th scope="col">직업</th>
-            <th scope="col">25초 데미지</th>
+            <th scope="col" class="shrink">랭킹</th>
+            <th scope="col" class="shrink">닉네임</th>
+            <th scope="col" class="shrink">직업</th>
+            <th scope="col" class="shrink">25초 데미지</th>
         </tr>
         </thead>
         <tbody id="ranking">

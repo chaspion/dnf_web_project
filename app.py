@@ -4,7 +4,7 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb://chaspion:tkfkdgo3@52.78.171.180', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@3.34.132.117', 27017)
 # client = MongoClient('localhost', 27017)
 db = client.dbsparta
 
