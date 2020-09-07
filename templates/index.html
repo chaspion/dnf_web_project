@@ -258,6 +258,37 @@
 
         }
 
+                function mythicitem() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/ranking',
+                data: {},
+                success: function (response) {
+                    let info = response['ranking'];
+                    for (let i = 0; i < 100; i++) {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/' + info[i]['server_id'] + '/characters/' + info[i]['char_id'] + '/equip/equipment?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN',
+                            data: {},
+                            success: function (response) {
+                                console.log('success');
+                                let item = response['equipment'];
+                                for (let i = 0; i < item.length; i++) {
+                                    if (item[i]['itemRarity'] == '신화') {
+                                        let item_name = item[i]['itemName']
+                                        let mythiclist = `<tr>
+                                            <th class="shrink">${item_name}</th>
+                                            </tr>`
+                                        $('#mythic').append(mythiclist)
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
 
     </script>
 
