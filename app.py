@@ -4,8 +4,8 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb://chaspion:tkfkdgo3@3.34.132.117', 27017)
-# client = MongoClient('localhost', 27017)
+# client = MongoClient('mongodb://chaspion:tkfkdgo3@3.34.132.117', 27017)
+client = MongoClient('localhost', 27017)
 db = client.dbsparta
 
 
@@ -21,7 +21,7 @@ def show_items():
 
 @app.route('/api/ranking', methods=['GET'])
 def show_ranking():
-    ranking = list(db.rank.find({}, {"_id": False}).sort('damage', DESCENDING))
+    ranking = list(db.rank.find({}, {"_id": False}).sort('rank_point', DESCENDING))
     return jsonify({'result': 'success', 'ranking': ranking})
 
 if __name__ == '__main__':
