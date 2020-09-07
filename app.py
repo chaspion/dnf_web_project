@@ -24,5 +24,10 @@ def show_ranking():
     ranking = list(db.rank.find({}, {"_id": False}).sort('rank_point', DESCENDING))
     return jsonify({'result': 'success', 'ranking': ranking})
 
+@app.route('/api/mythic', methods=['GET'])
+def show_mythic():
+    mythic = list(db.mythic.find({}, {"_id": False}).sort('count', DESCENDING))
+    return jsonify({'result': 'success', 'mythic': mythic})
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

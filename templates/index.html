@@ -23,6 +23,7 @@
             console.log('called')
             $("#stat_table").hide();
             ranking();
+            mythicitem();
         });
 
         function translateServer(val) {
@@ -86,7 +87,7 @@
             let charName = $('#char-name').val();
             let charEncode = encodeURIComponent(charName);
             let dfurl = "https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/" + serverID(serName) +
-                "/characters?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN&characterName=" + charEncode
+                "/characters?apikey=thmmFWpPsl6hUNoV8XPUp2C9xblxCQlQ&characterName=" + charEncode
 
             if (serName == '선택') {
                 alert('서버를 골라주세요');
@@ -122,7 +123,7 @@
             let charName = $('#char-name').val();
             let charEncode = encodeURIComponent(charName);
             let dfurl = "https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/" + serverID(serName) +
-                "/characters?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN&characterName=" + charEncode
+                "/characters?apikey=thmmFWpPsl6hUNoV8XPUp2C9xblxCQlQ&characterName=" + charEncode
 
             if (serName == '선택') {
                 alert('서버를 골라주세요');
@@ -146,7 +147,7 @@
                     let charImg = "https://img-api.neople.co.kr/df/servers/" + charServer + "/characters/"
                                     + charId + "?zoom=2"
                     let idurl = "https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/" + serverID(serName) + "/characters/" +
-                                    charId + "/status?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN"
+                                    charId + "/status?apikey=thmmFWpPsl6hUNoV8XPUp2C9xblxCQlQ"
 
 
 
@@ -221,51 +222,7 @@
         }
 
 
-        {#function showepic() {#}
-        {#    $('#item-box').empty();#}
-        {#    $.ajax({#}
-        {#        type: 'GET',#}
-        {#        url: '/api/list',#}
-        {#        data: {},#}
-        {#        success: function (response) {#}
-        {#            let epics = response['epics'];#}
-        {#            if (response['result'] == 'success') {#}
-        {#                for (let i = 0; i < epics.length; i++) {#}
-        {#                    console.log(epics[i]);#}
-        {#                    let name = epics[i]['name'];#}
-        {#                    let channel = epics[i]['channel_name'];#}
-        {#                    let time = epics[i]['time'];#}
-        {#                    let img_url = epics[i]['img_url'];#}
-        {##}
-        {#                    let itemList = `<div class="card">#}
-        {#                        <div class="card-content">#}
-        {#                          <div class="media">#}
-        {#                            <div class="media-left">#}
-        {#                              <figure class="image is-48x48">#}
-        {#                                <img#}
-        {#                                  src="${img_url}"#}
-        {#                                  alt="Placeholder image"#}
-        {#                                />#}
-        {#                              </figure>#}
-        {#                            </div>#}
-        {#                            <div class="media-content">#}
-        {#                              <a target="_blank" class="star-name title is-4"> ${name} | [채널] ${channel} | [시간] ${time}</a>#}
-        {#                              <p class="subtitle is-6"></p>#}
-        {#                            </div>#}
-        {#                          </div>#}
-        {#                        </div>#}
-        {#                      </div>`;#}
-        {##}
-        {#                    $('#item-box').append(itemList);#}
-        {##}
-        {#                    console.log('success')#}
-        {#                }#}
-        {#            }#}
-        {#            else {#}
-        {#                console.log('fail')#}
-        {#            }#}
-        {#        }#}
-        {#    });#}
+
 
         function ranking() {
             $.ajax({
@@ -276,7 +233,6 @@
                     let ranking = response['ranking'];
                     if (response['result'] == 'success') {
                         for (let i = 0; i < 100; i++) {
-                            console.log(ranking[i]);
                             let name = ranking[i]['char_name'];
                             let point = ranking[i]['rank_point'];
                             let server = translateServer(ranking[i]['server_id']);
@@ -292,18 +248,16 @@
                                             </tr>`
 
                             $('#ranking').append(ranklist);
-
-                            console.log('success')
                         }
                     }
                     else {
-                        console.log('fail')
                     }
                 }
             });
 
 
         }
+
 
     </script>
 
@@ -333,6 +287,7 @@
             border: 50px;
         }
 
+
         .length-control {
             margin-left: 100px;
             margin-right: 100px;
@@ -345,6 +300,7 @@
         }
 
         .epic-size-control {
+            margin-top: 100px;
             padding-left: 200px;
             padding-right: 200px;
         }
@@ -359,6 +315,12 @@
 
         table th.shrink {
             white-space: nowrap
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
 
 
@@ -449,30 +411,7 @@
 </div>
 
 
-<div class="epic-size-control">
-    <div class="item-list" id="item-box">
-        <div class="card">
-            <div class="card-content">
-                <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-20x20">
-                            <img
-                                    src="https://img-api.neople.co.kr/df/items/cd5895092f186bc87dbb8b540271c9d3"
-                                    alt="Placeholder image"
-                            />
-                        </figure>
-                    </div>
-                    <div class="media-content">
-                        <a href="#" target="_blank" class="star-name title is-4"> 아이템명</a>
-                        <p class="subtitle is-6"> 드랍된 채널 시간 </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="epic-size-control" id="rank">
+<div id="rank" style="float:left" class="epic-size-control">
     <h3 class="background-center" style="white-space: nowrap"> 아라드 최강자 랭킹 TOP 100 </h3>
     <table class="table">
         <thead class="thead-dark">
@@ -488,9 +427,25 @@
     </table>
 </div>
 
-<div class="background-center">
-    <img id="img-char" class = neople-size-control src="https://developers.neople.co.kr/img/logo_t1.png" />
+
+<div id="rank" style="float:left" class="epic-size-control">
+    <h3 class="background-center" style="white-space: nowrap"> 아라드 최강자 랭킹 TOP 100 </h3>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="shrink">아이템</th>
+        </tr>
+        </thead>
+        <tbody id="mythic">
+        </tbody>
+    </table>
 </div>
+
+<p>
+<div class="footer">
+    <img id="img-char" class = "neople-size-control" src="https://developers.neople.co.kr/img/logo_t1.png" />
+</div>
+</p>
 
 </body>
 </html>
