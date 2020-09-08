@@ -437,34 +437,32 @@
             text-align: center;
             margin-left: 20px;
             margin-right: 20px;
+            margin-top: 20px;
             border: 50px;
         }
 
+        .charimg-position {
+            text-align: center;
+            margin-top: -150px;
+        }
 
         .length-control {
-            margin-left: 100px;
-            margin-right: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 400px;
+            max-width: 600px;
             border: 50px;
         }
 
         .neople-size-control {
-            width: 200px;
-            border: 20px;
+            width: 90px;
+            border: 10px;
+            margin-top: -3px;
         }
 
         .youtube-size-control {
             width: 80px;
-            border: 20px;
-        }
-
-        .right-size-control {
-            margin-top: 100px;
-            padding-left: 500px;
-        }
-
-        .left-size-control {
-            margin-top: 100px;
-            padding-right: 500px;
+            margin-top: -8px;
         }
 
         * {
@@ -479,19 +477,14 @@
             white-space: nowrap
         }
 
-        .footer1 {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+        .wrap {
+            width: 450px;
+            margin: 50px auto;
         }
 
-        .footer2 {
-            position: fixed;
-            bottom: 0;
-            z-index: 1;
-            right: 0;
+        .box2 {
+            display: inline-block;
         }
-
 
     </style>
 
@@ -502,7 +495,17 @@
 </head>
 <body>
 
-<h5> 압도로스의 무의식 </h5>
+<h5 class="background-center"> 압도로스의 무의식
+    <a href="https://developers.neople.co.kr/" target="_blank">
+        <img class="neople-size-control" align="left"
+             src="../static/네오플.png"/>
+    </a>
+
+    <a href="https://www.youtube.com/channel/UCtFq4sFaj4Fuopy5t12xXrQ" target="_blank">
+        <img class="youtube-size-control" align="right" src="../static/압도유튜브.png"/>
+    </a>
+</h5>
+
 
 <hr/>
 
@@ -545,7 +548,7 @@
 
 <!--    캐릭 조회 기능들-->
     </p>
-    <div id = "stat_table" class = "background-center">
+    <div id = "stat_table" class = "length-control">
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -576,57 +579,43 @@
             </tbody>
         </table>
     </div>
+    <img id="img-char"class="charimg-position" src=""/>
 </div>
 
+<div align="center">
+    <div id="rank_table" class="box2">
+        <h3 class="background-center" style="white-space: nowrap">
+            <img src="../static/crown_black.png"> 아라드 최강자 랭킹 TOP 100 <img src="../static/crown_black.png"> </h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="shrink"><h7 class="medal-center">랭킹</h7></th>
+                <th scope="col" class="shrink"><h7 class="medal-center">닉네임</h7></th>
+                <th scope="col" class="shrink"><h7 class="medal-center">직업</h7></th>
+                <th scope="col" class="shrink"><h7 class="medal-center">랭킹 포인트</h7></th>
+            </tr>
+            </thead>
+            <tbody id="ranking">
+            </tbody>
+        </table>
+    </div>
 
-<div id="rank_table" style="float:left" class="right-size-control">
-    <h3 class="background-center" style="white-space: nowrap">
-        <img src="../static/crown_black.png"> 아라드 최강자 랭킹 TOP 100 <img src="../static/crown_black.png"> </h3>
-    <table class="table">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="shrink"><h7 class="medal-center">랭킹</h7></th>
-            <th scope="col" class="shrink"><h7 class="medal-center">닉네임</h7></th>
-            <th scope="col" class="shrink"><h7 class="medal-center">직업</h7></th>
-            <th scope="col" class="shrink"><h7 class="medal-center">랭킹 포인트</h7></th>
-        </tr>
-        </thead>
-        <tbody id="ranking">
-        </tbody>
-    </table>
+
+    <div id="mythic_item_table" class="box2">
+        <h3 class="background-center" style="white-space: nowrap"> TOP 200 랭커 선호 신화 </h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="shrink"><h7 class="medal-center">아이템명</h7></th>
+                <th scope="col" class="shrink"><h7 class="medal-center">장착개수</h7></th>
+            </tr>
+            </thead>
+            <tbody id="mythic">
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
-<div id="mythic_item_table" style="float:right" class="left-size-control">
-    <h3 class="background-center" style="white-space: nowrap"> TOP 200 랭커 선호 신화 </h3>
-    <table class="table">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="shrink"><h7 class="medal-center">아이템명</h7></th>
-            <th scope="col" class="shrink"><h7 class="medal-center">장착개수</h7></th>
-        </tr>
-        </thead>
-        <tbody id="mythic">
-        </tbody>
-    </table>
-</div>
-
-
-<p>
-<div class="footer1">
-    <a href="https://developers.neople.co.kr/" target="_blank" >
-    <img id="img-char" class = "neople-size-control" src="https://developers.neople.co.kr/img/logo_t1.png"/>
-    </a>
-</div>
-</p>
-
-<p>
-<div class="footer2">
-    <a href="https://www.youtube.com/channel/UCtFq4sFaj4Fuopy5t12xXrQ" target="_blank" >
-    <img id="img-char" class = "youtube-size-control" src="../static/압도.png"/>
-    </a>
-</div>
-</p>
 
 </body>
 </html>
