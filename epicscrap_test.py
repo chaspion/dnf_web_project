@@ -120,8 +120,17 @@ for i in range(0, len(urls)):
         char_id = info['characterid']
         point = info.select_one('#div_damage > b:nth-child(1)').text
         name = info.select_one('#div_rank > b:nth-child(3)').text
-        job = urls[i][56:-16].replace('%20', ' ')
         type = types[i]
+        char_url = 'https://dunfaoff.com/SearchResult.df?server=' + info['server'] + '&characterid=' + info['characterid']
+
+        if (('레이븐' in urls[i]) or ('디스트로이어' in urls[i]) or ('커맨더' in urls[i]) or ('프라임' in urls[i])):
+            job = urls[i][55:-16].replace('%20', ' ')
+        elif (('태을선인' in urls[i]) or ('이모탈' in urls[i]) or ('저스티스' in urls[i])) :
+            job = urls[i][57:-16].replace('%20', ' ')
+        else:
+            job = urls[i][56:-16].replace('%20', ' ')
+
+
         print(server_id, char_id, point, name, job, type)
 
         char_db = {
@@ -130,7 +139,8 @@ for i in range(0, len(urls)):
             'rank_point': point,
             'char_name': name,
             'job': job,
-            'type': type
+            'type': type,
+            'char_url': char_url
         }
 
         db.rank.insert_one(char_db)

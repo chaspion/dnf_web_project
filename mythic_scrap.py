@@ -22,7 +22,7 @@ soup = BeautifulSoup(html, 'html.parser')
 driver.close()
 
 
-
+db.mythic.delete_many({})
 item_info = soup.select('#searchList > tr')
 for items in item_info:
     name = items.select_one('td.name > div:nth-child(2) > span.item_c8').text
