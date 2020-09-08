@@ -154,7 +154,8 @@
 
                     $('#img-char').attr("src", charImg);
 
-                    $("#rank").hide();
+                    $("#rank_table").hide();
+                    $("#mythic_item_table").hide();
                     $("#stat_table").show();
 
                     $.ajax({
@@ -337,13 +338,17 @@
             border: 20px;
         }
 
-        .epic-size-control {
+        .right-size-control {
             margin-top: 100px;
-            padding-left: 200px;
-            padding-right: 200px;
+            padding-left: 500px;
         }
 
-        *{
+        .left-size-control {
+            margin-top: 100px;
+            padding-right: 500px;
+        }
+
+        * {
             font-family: 'Nanum Myeongjo', serif;
         }
 
@@ -449,7 +454,7 @@
 </div>
 
 
-<div id="rank" style="float:left" class="epic-size-control">
+<div id="rank_table" style="float:left" class="right-size-control">
     <h3 class="background-center" style="white-space: nowrap"> 아라드 최강자 랭킹 TOP 100 </h3>
     <table class="table">
         <thead class="thead-dark">
@@ -466,7 +471,7 @@
 </div>
 
 
-<div id="rank" style="float:left" class="epic-size-control">
+<div id="mythic_item_table" style="float:right" class="left-size-control">
     <h3 class="background-center" style="white-space: nowrap"> TOP 200 랭커 선호 신화 </h3>
     <table class="table">
         <thead class="thead-dark">
