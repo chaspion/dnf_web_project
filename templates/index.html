@@ -258,32 +258,32 @@
 
         }
 
-                function mythicitem() {
+        function mythicitem() {
             $.ajax({
                 type: 'GET',
-                url: '/api/ranking',
+                url: '/api/mythic',
                 data: {},
                 success: function (response) {
-                    let info = response['ranking'];
-                    for (let i = 0; i < 100; i++) {
-                        $.ajax({
-                            type: 'GET',
-                            url: 'https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/' + info[i]['server_id'] + '/characters/' + info[i]['char_id'] + '/equip/equipment?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN',
-                            data: {},
-                            success: function (response) {
-                                console.log('success');
-                                let item = response['equipment'];
-                                for (let i = 0; i < item.length; i++) {
-                                    if (item[i]['itemRarity'] == '신화') {
-                                        let item_name = item[i]['itemName']
-                                        let mythiclist = `<tr>
-                                            <th class="shrink">${item_name}</th>
+                    let item = response['mythic'];
+                    if (response['result'] == 'success') {
+                        for (let i = 0; i < item.length; i++) {
+                            let name = item[i]['name']
+                            let img_url = item[i]['img_url'];
+                            let item_url = item[i]['item_url'];
+                            let count = item[i]['count'];
+
+                            let mythiclist = `
+                                            <tr>
+                                            <th>
+                                            <div class="media-content">
+                                            <img src="${img_url}" alt="Placeholder image"/>
+                                            <a href="${item_url}" target="_blank">${name}</a>
+                                            </div>
+                                            </th>
+                                            <th class="shrink">${count}</th>
                                             </tr>`
-                                        $('#mythic').append(mythiclist)
-                                    }
-                                }
-                            }
-                        });
+                            $('#mythic').append(mythiclist)
+                        }
                     }
                 }
             });
@@ -293,6 +293,13 @@
     </script>
 
     <style type="text/css">
+
+        a:link {
+            background: linear-gradient(to bottom, #f58b15 0%, #b541a4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         div.question-box {
             color: white;
             margin: 10px 0 20px 0;
@@ -460,11 +467,12 @@
 
 
 <div id="rank" style="float:left" class="epic-size-control">
-    <h3 class="background-center" style="white-space: nowrap"> 아라드 최강자 랭킹 TOP 100 </h3>
+    <h3 class="background-center" style="white-space: nowrap"> TOP 200 랭커 선호 신화 </h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col" class="shrink">아이템</th>
+            <th scope="col" class="shrink">아이템명</th>
+            <th scope="col" class="shrink">장착개수</th>
         </tr>
         </thead>
         <tbody id="mythic">
