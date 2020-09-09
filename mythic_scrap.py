@@ -9,7 +9,7 @@ from selenium import webdriver
 # soup = BeautifulSoup(data.text, 'html.parser')
 
 
-client = MongoClient('mongodb://chaspion:tkfkdgo3@3.35.18.118', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@13.125.62.199', 27017)
 # client = MongoClient('localhost', 27017)
 db = client.dbsparta
 

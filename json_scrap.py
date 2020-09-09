@@ -4,7 +4,7 @@ import epicscrap_test
 import epic_scrap
 
 def mythic_scrap():
-    client = MongoClient('mongodb://chaspion:tkfkdgo3@3.35.18.118', 27017)
+    client = MongoClient('mongodb://chaspion:tkfkdgo3@13.125.62.199', 27017)
     # client = MongoClient('localhost', 27017)
     db = client.dbsparta
     headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
