@@ -8,12 +8,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="던파랭크"/>
+    <meta property="og:description" content="압도로스의 무의식"/>
+    <meta property="og:image" content="{{ url_for('static', filename='crazy.jpg') }}"/>
 
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <title>압도로스의 무의식</title>
+    <title>던파랭크</title>
     <!-- JQuery를 import 합니다 -->
 
 
@@ -31,7 +35,7 @@
                 return '카인';
             }
             if(val === 'diregie') {
-                return '디레지에';
+                return '디레';
             }
             if(val === 'siroco') {
                 return '시로코';
@@ -40,7 +44,7 @@
                 return '프레이';
             }
             if(val === 'casillas') {
-                return '카시야스';
+                return '카시';
             }
             if(val === 'hilder') {
                 return '힐더';
@@ -131,7 +135,7 @@
                 alert('캐릭터명을 입력하세요');
                 $('#char-name').focus();
             } else {
-                alert('검색중입니다')
+                alert('검색중입니다');
             }
 
             $.ajax({
@@ -140,84 +144,84 @@
                 data: {},
                 success: (response) => {
                     let charInfo = response["rows"];
-                    let charId = charInfo[0]['characterId']
-                    let charServer = charInfo[0]['serverId']
+                    if (charInfo.length == 0) {
+                        alert('캐릭명이 존재하지 않습니다.');
+                    } else {
+                        let charId = charInfo[0]['characterId']
+                        let charServer = charInfo[0]['serverId']
 
 
-                    let charImg = "https://img-api.neople.co.kr/df/servers/" + charServer + "/characters/"
-                                    + charId + "?zoom=2"
-                    let idurl = "https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/" + serverID(serName) + "/characters/" +
-                                    charId + "/status?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN"
+                        let charImg = "https://img-api.neople.co.kr/df/servers/" + charServer + "/characters/"
+                            + charId + "?zoom=2"
+                        let idurl = "https://cors-anywhere.herokuapp.com/https://api.neople.co.kr/df/servers/" + serverID(serName) + "/characters/" +
+                            charId + "/status?apikey=u24sm4DgTGNKceFknyhar93DXxuHX9pN"
 
 
+                        $('#img-char').attr("src", charImg);
+
+                        $("#rank_table").hide();
+                        $("#mythic_item_table").hide();
+                        $("#stat_table").show();
+
+                        $.ajax({
+                            type: "GET",
+                            url: idurl,
+                            data: {},
+                            success: (response) => {
+                                let charInfo2 = response;
+                                let status = response['status'];
+
+                                let charName = charInfo2['characterName'];
+                                let charClass = charInfo2['jobName'];
+                                let charJob = charInfo2['jobGrowName'];
+                                let charLevel = charInfo2['level'];
+                                let adventureName = charInfo2['adventureName'];
+                                let guildName = charInfo2['guildName'];
+
+                                let element = Math.max(status[23]['value'], status[25]['value'],
+                                    status[27]['value'], status[29]['value'],);
+
+                                if (status[4]['value'] > status[5]['value']) {
+                                    stat = status[4];
+                                } else {
+                                    stat = status[5];
+                                }
+                                if (status[10]['value'] > status[11]['value']) {
+                                    crit = status[10];
+                                } else {
+                                    crit = status[11];
+                                }
+                                if (element === status[23]['value']) {
+                                    element_attack = status[23];
+                                } else if (element === status[25]['value']) {
+                                    element_attack = status[25];
+                                } else if (element === status[27]['value']) {
+                                    element_attack = status[27];
+                                } else {
+                                    element_attack = status[29];
+                                }
+
+                                let ranking = "개발중";
+                                let sandbag = "개발중";
 
 
-                    $('#img-char').attr("src", charImg);
+                                let charInfo = `<tr><td>${charName}</td><td>${charClass}</td>
+                                                <td>${charJob}</td><td>${charLevel}</td>
+                                                <td>${adventureName}</td><td>${guildName}</td></tr>`
 
-                    $("#rank_table").hide();
-                    $("#mythic_item_table").hide();
-                    $("#stat_table").show();
+                                let charStat = `<tr>
+                                                <td>${stat['name']} ${stat['value']}</td>
+                                                <td>${crit['name'][0]}${crit['name'][3]} ${crit['value']}</td>
+                                                <td>${element_attack['name'][0]}${element_attack['name'][1]}${element_attack['name'][4]} ${element_attack['value']}</td>
+                                                <td>${ranking}</td>
+                                                <td>${sandbag}</td>
+                                                </tr>`
 
-                    $.ajax({
-                        type: "GET",
-                        url: idurl,
-                        data: {},
-                        success: (response) => {
-                            let charInfo2 = response;
-                            let status = response['status'];
-
-                            let charName = charInfo2['characterName'];
-                            let charClass = charInfo2['jobName'];
-                            let charJob = charInfo2['jobGrowName'];
-                            let charLevel = charInfo2['level'];
-                            let adventureName = charInfo2['adventureName'];
-                            let guildName = charInfo2['guildName'];
-
-                            let element = Math.max(status[23]['value'], status[25]['value'],
-                                status[27]['value'], status[29]['value'],);
-
-                            if (status[4]['value'] > status[5]['value']) {
-                                stat = status[4];
-                            } else {
-                                stat = status[5];
+                                $('#df-char').append(charInfo);
+                                $('#df-status').append(charStat);
                             }
-                            if (status[10]['value'] > status[11]['value']) {
-                                crit = status[10];
-                            } else {
-                                crit = status[11];
-                            }
-                            if (element === status[23]['value']) {
-                                element_attack = status[23];
-                            } else if (element === status[25]['value']) {
-                                element_attack = status[25];
-                            } else if (element === status[27]['value']) {
-                                element_attack = status[27];
-                            } else {
-                                element_attack = status[29];
-                            }
-// https://dundam.xyz/view.jsp?server=cain&name=%EC%95%95%EB%8F%84&image=0371060bc18b58a0da2a6f61f79f2e35
-                            let dundam_url = "https://dundam.xyz/view.jsp?server=" + serverID(serName) +
-                                                "&name=" + charEncode + "&image=" + charId
-                            let ranking = "개발중";
-                            let sandbag = "개발중";
-
-
-                            let charInfo = `<tr><td>${charName}</td><td>${charClass}</td>
-                                            <td>${charJob}</td><td>${charLevel}</td>
-                                            <td>${adventureName}</td><td>${guildName}</td></tr>`
-
-                            let charStat = `<tr>
-                                            <td>${stat['name']} ${stat['value']}</td>
-                                            <td>${crit['name'][0]}${crit['name'][3]} ${crit['value']}</td>
-                                            <td>${element_attack['name'][0]}${element_attack['name'][1]}${element_attack['name'][4]} ${element_attack['value']}</td>
-                                            <td>${ranking}</td>
-                                            <td>${sandbag}</td>
-                                            </tr>`
-
-                            $('#df-char').append(charInfo);
-                            $('#df-status').append(charStat);
-                        }
-                    })
+                        })
+                    }
                 }
             })
         }
@@ -249,11 +253,11 @@
                                                 <th class="shrink"><img src="../static/medal_gold.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank1-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank1-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:indianred">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 } else {
@@ -261,11 +265,11 @@
                                                 <th class="shrink"><img src="../static/medal_gold.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank1-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank1-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:dodgerblue">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 }
@@ -275,11 +279,11 @@
                                                 <th class="shrink"><img src="../static/medal_silver.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank2-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank2-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:indianred">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 } else {
@@ -287,11 +291,11 @@
                                                 <th class="shrink"><img src="../static/medal_silver.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank2-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank2-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:dodgerblue">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 }
@@ -301,11 +305,11 @@
                                                 <th class="shrink"><img src="../static/medal_bronze.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank3-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank3-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:indianred">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 } else {
@@ -313,11 +317,11 @@
                                                 <th class="shrink"><img src="../static/medal_bronze.png" class="medal-center"></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h6>[${server}] <a href="${url}" target="_blank" class="rank3-font">${name}</a></h6>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank3-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:dodgerblue">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 }
@@ -327,11 +331,11 @@
                                                 <th class="shrink"><h10 class="medal-center">${rank}위</h10></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h7>[${server}] <a href="${url}" target="_blank" class="rank-font">${name}</a></h7>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:indianred">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 } else {
@@ -339,11 +343,11 @@
                                                 <th class="shrink"><h10 class="medal-center">${rank}위</h10></th>
                                                 <th class="shrink">
                                                 <div class="media-content">
-                                                <h7>[${server}] <a href="${url}" target="_blank" class="rank-font">${name}</a></h7>
+                                                <h7><small>[${server}]</small> <a href="${url}" target="_blank" class="rank-font">${name}</a></h7>
                                                 </div>
                                                 </th>
                                                 <th class="shrink">${job} <small style="color:dodgerblue">[${type}]</small></th>
-                                                <th class="shrink">${point}</th>
+                                                <th class="shrink"><small>${point}</small></th>
                                                 </tr>`
                                     $('#ranking').append(ranklist);
                                 }
@@ -441,6 +445,13 @@
             border: 50px;
         }
 
+        .title-center {
+            font-family: 'Black Han Sans', sans-serif;
+            text-align: left;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+
         .charimg-position {
             text-align: center;
             margin-top: -150px;
@@ -449,7 +460,7 @@
         .length-control {
             margin-left: auto;
             margin-right: auto;
-            min-width: 400px;
+            min-width: 300px;
             max-width: 600px;
             border: 50px;
         }
@@ -461,12 +472,37 @@
         }
 
         .youtube-size-control {
-            width: 80px;
-            margin-top: -8px;
+            width: 110px;
+            margin-top: -15px;
+            margin-right: 10px;
         }
+
+        .search-size-control {
+            text-align: center;
+            width: 220px;
+            margin-top: -18px;
+        }
+
+        .button-size-control {
+            text-align: center;
+            width: 70px;
+        }
+
+        .title-size-control {
+            text-align: center;
+            width: 80px;
+            margin-top: -18px;
+            margin-left: -25px;
+            position: relative;
+        }
+
 
         * {
             font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .important-font {
+            font-family: 'Black Han Sans', sans-serif;
         }
 
         table {
@@ -482,9 +518,16 @@
             margin: 50px auto;
         }
 
+        .box1 {
+            display: inline-block;
+            max-width: 450px;
+        }
+
         .box2 {
             display: inline-block;
         }
+
+
 
     </style>
 
@@ -495,14 +538,10 @@
 </head>
 <body>
 
-<h5 class="background-center"> 압도로스의 무의식
-    <a href="https://developers.neople.co.kr/" target="_blank">
-        <img class="neople-size-control" align="left"
-             src="../static/네오플.png"/>
-    </a>
-
+<h5 class="title-center"> DF
+    <img class="title-size-control" src="../static/던파랭크.png"/>
     <a href="https://www.youtube.com/channel/UCtFq4sFaj4Fuopy5t12xXrQ" target="_blank">
-        <img class="youtube-size-control" align="right" src="../static/압도유튜브.png"/>
+        <img class="youtube-size-control" align="right" src="../static/압도튜브.png"/>
     </a>
 </h5>
 
@@ -510,7 +549,7 @@
 <hr/>
 
 <div class="background-center">
-    <h2>DNF 캐릭터 검색</h2>
+    <img class="search-size-control" src="../static/캐릭터검색기.png"/>
 
 <!--        <h3>서버 선택 <input type="text" id = "server-name"> </h3>-->
     <div class="length-control">
@@ -544,7 +583,7 @@
     </div>
 
 <!--    캐릭 정보를 불러오기 위한 버튼-->
-    <button type="button" onclick="showCharInfo()" class="btn btn-info" id = "btn-post-info">검색</button>
+    <input type="image" class="button-size-control" onclick="showCharInfo()" src="../static/검색.png" />
 
 <!--    캐릭 조회 기능들-->
     </p>
@@ -583,16 +622,15 @@
 </div>
 
 <div align="center">
-    <div id="rank_table" class="box2">
-        <h3 class="background-center" style="white-space: nowrap">
-            <img src="../static/crown_black.png"> 아라드 최강자 랭킹 TOP 100 <img src="../static/crown_black.png"> </h3>
+    <div id="rank_table" class="box1">
+        <h4 class="important-font"> <img src="../static/crown_black.png"> 아라드 최강자 랭킹 TOP 100 <img src="../static/crown_black.png"> </h4>
         <table class="table">
             <thead class="thead-dark">
             <tr>
                 <th scope="col" class="shrink"><h7 class="medal-center">랭킹</h7></th>
                 <th scope="col" class="shrink"><h7 class="medal-center">닉네임</h7></th>
                 <th scope="col" class="shrink"><h7 class="medal-center">직업</h7></th>
-                <th scope="col" class="shrink"><h7 class="medal-center">랭킹 포인트</h7></th>
+                <th scope="col" class="shrink"><h7 class="medal-center">포인트</h7></th>
             </tr>
             </thead>
             <tbody id="ranking">
@@ -602,7 +640,7 @@
 
 
     <div id="mythic_item_table" class="box2">
-        <h3 class="background-center" style="white-space: nowrap"> TOP 200 랭커 선호 신화 </h3>
+        <h4 class="important-font"> <img src="../static/block.png"> TOP 200 랭커 선호 신화 <img src="../static/block.png"> </h4>
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -614,6 +652,16 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div align="center">
+    <small>랭킹은 2시간마다 갱신됩니다.</small>
+</div>
+
+<div class="background-center">
+    <a href="https://developers.neople.co.kr/" target="_blank">
+        <img class="neople-size-control" align="center" src="../static/네오플로고.png"/>
+    </a>
 </div>
 
 

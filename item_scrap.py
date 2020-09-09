@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from selenium import webdriver
 
-client = MongoClient('mongodb://chaspion:tkfkdgo3@3.35.53.238', 27017)
+client = MongoClient('mongodb://chaspion:tkfkdgo3@52.79.150.186', 27017)
 db = client.dbsparta
 
 # headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
